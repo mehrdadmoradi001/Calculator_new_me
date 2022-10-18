@@ -13,8 +13,5 @@ final Color bgPageTop = HexColor('#4B4F50');
 final Color bgPageBottom = HexColor('#25282D');
 final Color coTextDisplay = HexColor('#73746E');
 final Color coTextResult = HexColor('#A6AFAE');
-
-
-
-
+//s
 
