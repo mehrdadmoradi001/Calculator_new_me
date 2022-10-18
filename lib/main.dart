@@ -1,5 +1,6 @@
 import 'package:calculator_new_me/constant/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(CalculatorNewMe());
@@ -13,6 +14,9 @@ class CalculatorNewMe extends StatefulWidget {
 }
 
 class _CalculatorNewMeState extends State<CalculatorNewMe> {
+  var clickButton = '';
+  var result = '';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,6 +29,29 @@ class _CalculatorNewMeState extends State<CalculatorNewMe> {
               Expanded(
                 flex: 3,
                 child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Text(
+                          '$clickButton',
+                          style: TextStyle(
+                              fontSize: 31, fontWeight: FontWeight.w500,color: coTextDisplay),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Text(
+                          '$result',
+                          style: TextStyle(
+                              fontSize: 64, fontWeight: FontWeight.w500,color: coTextResult),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                    ],
+                  ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
@@ -95,9 +122,9 @@ class _CalculatorNewMeState extends State<CalculatorNewMe> {
   Color getBackgroundTop(String text) {
     if (isOperator(text)) {
       return bgTextButtonsTop;
-    } else if(text =='C'){
+    } else if (text == 'C') {
       return coYellow;
-    }else{
+    } else {
       return bgTextButtons;
     }
   }
@@ -109,9 +136,6 @@ class _CalculatorNewMeState extends State<CalculatorNewMe> {
       return Colors.white;
     }
   }
-
-
-
 
   Widget getElevatedButtons(String text) {
     return TextButton(
@@ -128,7 +152,20 @@ class _CalculatorNewMeState extends State<CalculatorNewMe> {
           ),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        if(text == 'C'){
+          setState(() {
+            result = '';
+            clickButton = '';
+          });
+        }else{
+          setState(
+                () {
+              clickButton = clickButton + text;
+            },
+          );
+        }
+      },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 28, vertical: 18),
         child: Text(
@@ -154,7 +191,18 @@ class _CalculatorNewMeState extends State<CalculatorNewMe> {
           ),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        if (textRight == '<') {
+          setState(() {
+            clickButton = clickButton.substring(0, clickButton.length - 1);
+            result = '';
+          });
+        } else {
+          setState(() {
+            clickButton = clickButton + textRight;
+          });
+        }
+      },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 28),
         child: Text(
@@ -180,7 +228,15 @@ class _CalculatorNewMeState extends State<CalculatorNewMe> {
           ),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        Parser parser = Parser();
+        Expression expression = parser.parse(clickButton);
+        ContextModel contextModel = ContextModel();
+        double eval = expression.evaluate(EvaluationType.REAL, contextModel);
+        setState(() {
+          result = eval.toString();
+        });
+      },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 53, horizontal: 22),
         child: Text(
