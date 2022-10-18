@@ -1,6 +1,7 @@
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
 
+
 final Color coYellow = HexColor('#FDBB2C');
 final Color coEqual = HexColor('#9028E0');
 final Color coTextButtons = HexColor('#B0B5B2');
